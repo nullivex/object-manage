@@ -79,6 +79,42 @@ inst.get('mykey') //'mydata'
 inst.get('mykey2.data') //'mydata
 ```
 
+### Path Exists
+
+Check if a path exists
+
+**NOTE** This uses `hasOwnProperty()` method of the object so is safe
+to return an accurate value even when a path is set to `undefined`
+
+```js
+var inst = new ObjectManage({mykey: 'myvalue'})
+inst.exists('mykey') //true
+inst.exists('mykey2') //false
+```
+
+### Remove a Path
+
+Remove a path and all its children
+
+This uses `delete object[property]` and does not just set the property
+to `undefined`
+
+```js
+var inst = new ObjectManage({mykey: {mykey2: 'myvalue'}})
+inst.exists('mykey.mykey2') //true
+inst.remove('mykey')
+inst.exists('mykey.mykey') //false
+```
+
+## Changelog
+
+### 0.2.0
+* Added `ObjectManage.exists()`
+* Added `ObjectManage.remove()`
+
+### 0.1.0
+* Initial Release
+
 ## License
 
 MIT licensed see `LICENSE.md`

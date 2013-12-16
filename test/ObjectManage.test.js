@@ -31,4 +31,17 @@ describe.only('ObjectManage',function(){
     var obj = new ObjectManage(data1)
     expect(obj.get('test5.test6')).to.equal(undefined)
   })
+  it('should return true if the property exists',function(){
+    var obj = new ObjectManage(data1)
+    expect(obj.exists('test1')).to.equal(true)
+  })
+  it('should return false if the property does not exist',function(){
+    var obj = new ObjectManage()
+    expect(obj.exists('test1')).to.equal(false)
+  })
+  it('should remove a property and all its children',function(){
+    var obj = new ObjectManage([data1,data2,data3])
+    obj.remove('test5')
+    expect(obj.data.hasOwnProperty('test5')).to.equal(false)
+  })
 })
