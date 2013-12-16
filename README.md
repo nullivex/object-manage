@@ -1,4 +1,4 @@
-object-manage
+object-manage [![Build Status](https://travis-ci.org/snailjs/object-manage.png?branch=master)](https://travis-ci.org/snailjs/object-manage)
 =============
 
 A library for managing javascript objects and offering common getter, setter, merge support.
