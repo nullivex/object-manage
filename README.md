@@ -59,7 +59,7 @@ It can even be a recursive array
 inst.load([data1,[data2,data3]])
 ```
 
-## Set Value
+### Set Value
 
 Set will recursively set a path given by a string using dot notation.
 
@@ -69,7 +69,7 @@ inst.set('mykey','mydata') //{mykey: 'mydata'}
 inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 ```
 
-## Get Value
+### Get Value
 
 Get will recursively set a path given by a string using dot notation.
 
@@ -78,3 +78,7 @@ var isnt = new ObjectManage({mykey: 'mydata', mykey2: {data: 'mydata'}})
 inst.get('mykey') //'mydata'
 inst.get('mykey2.data') //'mydata
 ```
+
+## License
+
+MIT licensed see `LICENSE.md`
