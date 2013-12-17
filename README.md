@@ -10,7 +10,6 @@ This helper is generally meant to be implemented into higher level API's. As suc
 simple.
 
 ```js
-
 var ObjectManage = require('object-manage')
   , obj = new ObjectManage({box: 'square'})
 //load in data
@@ -22,7 +21,12 @@ obj.get('bas') //{boo: 'foo1'}
 obj.get('bas.boo') //'foo1'
 //access data directly
 console.log(obj.data.bas.boo) //'foo1'
-
+//check if a path exists
+obj.exists('bas') //true
+obj.exists('badkey') //false
+//remove a path
+obj.remove('bas')
+obj.exists('bas') //false
 ```
 
 ## API Reference
