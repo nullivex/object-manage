@@ -112,6 +112,9 @@ inst.exists('mykey.mykey') //false
 
 ## Changelog
 
+### 0.2.1
+* Updated package.json
+
 ### 0.2.0
 * Added `ObjectManage.exists()`
 * Added `ObjectManage.remove()`

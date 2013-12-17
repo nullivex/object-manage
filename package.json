@@ -1,10 +1,23 @@
 {
   "name": "object-manage",
-  "version": "0.2.0",
+  "description": "A library for managing javascript objects and offering common getter, setter, merge support.",
+  "homepage": "https://github.com/snailjs/object-manage",
+  "bugs": "https://github.com/snailjs/object-manage/issues",
+  "version": "0.2.1",
   "author": "Bryan Tong <contact@nullivex.com>",
+  "license": "MIT",
+  "keywords": [
+    "object",
+    "getter",
+    "setter",
+    "merge",
+    "path",
+    "recursive",
+    "nested"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/snailjs/object-manage/"
+    "url": "https://github.com/snailjs/object-manage.git"
   },
   "engines": {
     "node": ">=0.8.0"
