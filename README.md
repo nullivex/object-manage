@@ -119,6 +119,9 @@ inst.exists('mykey.mykey') //false
 
 ## Changelog
 
+### 0.2.3
+* Small fix to make sure `ObjectManage.data` is always an object
+
 ### 0.2.2
 * Changed from **merge** to **object-merge** to allow for recursive merging
 * Made private functions more robust to non-sane input

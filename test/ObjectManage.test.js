@@ -44,4 +44,9 @@ describe.only('ObjectManage',function(){
     obj.remove('test5')
     expect(obj.data.hasOwnProperty('test5')).to.equal(false)
   })
+  it('should always have an object at .data',function(){
+    var obj = new ObjectManage()
+    obj.load(undefined)
+    expect(obj.data).to.be.an('object')
+  })
 })
