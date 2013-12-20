@@ -117,7 +117,28 @@ inst.remove('mykey')
 inst.exists('mykey.mykey') //false
 ```
 
+### Check Object Depth
+
+This will take a userspace object and count the depth of the object.
+
+```js
+var inst = new ObjectManage()
+var obj = {foo: {foo: {foo: 'baz'}}}
+obj.countDepth(obj) //3
+```
+
 ## Changelog
+
+### 0.4.0
+* Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`
+* Added extensive testing against object size testing and warnings
+* Even if maxDepth is exceeded the merge will still be attempted but is likely to fail with a
+`Maximum call stack exceeded` error
+* Max depth is adjustable using the `ObjectManage.maxDepth` property
+* Added `ObjectManage.countDepth(object)` to check object depth
+* Changed merging package to [merge-recursive](https://github.com/UmbraEngineering/node-merge-recursive) this
+will now maintain associations to parent objects so that libraries can establish a pointer to the managed object
+eg: `var obj = new ObjectManage(); var watched = obj.data`
 
 ### 0.3.0
 * No argument to `get()` now returns the entire object

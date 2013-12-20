@@ -59,4 +59,58 @@ describe.only('ObjectManage',function(){
     expect(obj.get('test5.test6')).to.equal('val6')
     expect(obj.get('test5.test7')).to.equal('val7')
   })
+  it('should count object depth accurately',function(){
+    var testObject = {foo: {foo: {foo: 'baz'}}}
+      , obj = new ObjectManage()
+    expect(obj.countDepth(testObject)).to.equal(3)
+  })
+  it('should warn on objects more than 50 levels deep',function(){
+    //setup console mocking
+    var oldLog = console.log
+      , oldTrace = console.trace
+      , log = []
+      , traced = false
+    console.log = function(msg){
+      log.push(msg)
+    }
+    console.trace = function(){
+      traced = true
+    }
+    var buildObject = function(object,depth,count){
+      if(undefined === object) object = {}
+      if(undefined === count) count = 1
+      if(undefined === depth) depth = 100
+      if(count > depth) return object
+      object[count] = buildObject(object[count],depth,(count + 1))
+      return object
+    }
+    //var obj = new ObjectManage()
+    var badObject = buildObject()
+      , obj = new ObjectManage()
+    //verify the limiter on depth is working
+    expect(obj.countDepth(badObject)).to.equal(obj.maxDepth)
+    //verify that we can adjust the maxDepth
+    var oldMaxDepth = obj.maxDepth
+    obj.maxDepth = 20
+    expect(obj.countDepth(badObject)).to.equal(20)
+    //restore original
+    obj.maxDepth = oldMaxDepth
+    //load the bad object which should puke
+    obj.load(badObject)
+    //verify the warning was thrown
+    expect(log[0]).to.equal('WARN [object-manage]: Object being merged is too deep (50)')
+    expect(traced).to.equal(true)
+    //cleanup
+    log = []
+    traced = false
+    //set the max depth to a lower value and try again
+    obj.maxDepth = 10
+    //load the bad object which should puke
+    obj.load(badObject)
+    expect(log[0]).to.equal('WARN [object-manage]: Object being merged is too deep (10)')
+    expect(traced).to.equal(true)
+    //restore native console functions
+    console.log = oldLog
+    console.trace = oldTrace
+  })
 })
