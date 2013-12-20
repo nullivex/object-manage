@@ -3,6 +3,13 @@ object-manage [![Build Status](https://travis-ci.org/snailjs/object-manage.png?b
 
 A library for managing javascript objects and offering common getter, setter, merge support.
 
+Works great for managing config objects and libraries that have options.
+
+## Installation
+
+```
+$ npm install object-manage
+```
 
 ## Usage
 
