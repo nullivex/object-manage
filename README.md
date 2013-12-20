@@ -119,6 +119,10 @@ inst.exists('mykey.mykey') //false
 
 ## Changelog
 
+### 0.3.0
+* No argument to `get()` now returns the entire object
+* Testing added against recursive merging
+
 ### 0.2.3
 * Small fix to make sure `ObjectManage.data` is always an object
 

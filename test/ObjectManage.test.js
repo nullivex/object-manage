@@ -49,4 +49,14 @@ describe.only('ObjectManage',function(){
     obj.load(undefined)
     expect(obj.data).to.be.an('object')
   })
+  it('should return the whole object if no argument if passed to get',function(){
+    var obj = new ObjectManage([data1,data2,data3])
+    expect(Object.keys(obj.get()).length).to.equal(5)
+  })
+  it('should merge recursively',function(){
+    var obj = new ObjectManage(data3)
+    obj.load({test5: {test7: 'val7'}})
+    expect(obj.get('test5.test6')).to.equal('val6')
+    expect(obj.get('test5.test7')).to.equal('val7')
+  })
 })
