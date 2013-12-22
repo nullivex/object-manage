@@ -158,8 +158,7 @@ obj.countDepth(obj) //3
 
 ### 0.5.0
 * ObjectManage is now an event emitter that fires the `load` event for watching data
-* Switched back to `object-merge` which some help on debugging bad objects
-* maxDepth will also be passed to the merge to restrict merging deep objects
+* Switched back to `object-merge` which should help on debugging bad objects
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`
