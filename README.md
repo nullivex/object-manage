@@ -16,24 +16,42 @@ $ npm install object-manage
 This helper is generally meant to be implemented into higher level API's. As such usage is
 simple.
 
+ObjectManage is also an event emitter that allows the internal data object to be watched
+and augmented manually.
+
 ```js
 var ObjectManage = require('object-manage')
-  , obj = new ObjectManage({box: 'square'})
+
+//construct
+var obj = new ObjectManage({box: 'square'})
+
+//watch data
+var mydata = {}
+obj.on('load',function(data){
+  mydata = data
+})
+
 //load in data
 obj.load({foo: 'bar'})
+
 //set a path
 obj.set('bas.boo','foo1')
+
 //get a path
 obj.get('bas') //{boo: 'foo1'}
 obj.get('bas.boo') //'foo1'
+
 //access data directly
 console.log(obj.data.bas.boo) //'foo1'
+
 //check if a path exists
 obj.exists('bas') //true
 obj.exists('badkey') //false
+
 //remove a path
 obj.remove('bas')
 obj.exists('bas') //false
+
 ```
 
 ## API Reference
@@ -42,6 +60,15 @@ obj.exists('bas') //false
 
 The constructor sets up the object to be managed and accepts
 the a single argument that gets passed to `ObjectManage.load(data)`
+
+```js
+var data = {foo: 'foo'}
+var inst = new ObjectManage(data)
+```
+
+**NOTE** If watching data via the `load` event is desired data
+should not be passed to the construct as it will be impossible to
+listen for the `load` event.
 
 ### Load Object(s)
 
@@ -60,7 +87,7 @@ be merged on top of each other in order.
 var data1 = {test1: 'val1', test2: 'val2'}
   , data2 = {test3: 'val3', test4: 'val4'}
   , data3 = {test5: {test6: 'val6'}}
-var inst = ObjectManage()
+var inst = new ObjectManage()
 inst.load([data1,data2,data3])
 ```
 
@@ -128,6 +155,11 @@ obj.countDepth(obj) //3
 ```
 
 ## Changelog
+
+### 0.5.0
+* ObjectManage is now an event emitter that fires the `load` event for watching data
+* Switched back to `object-merge` which some help on debugging bad objects
+* maxDepth will also be passed to the merge to restrict merging deep objects
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`

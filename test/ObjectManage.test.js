@@ -1,4 +1,6 @@
+'use strict';
 var ObjectManage = require('../lib/ObjectManage')
+  , expect = require('chai').expect
 describe.only('ObjectManage',function(){
   var data1 = {test1: 'val1', test2: 'val2'}
     , data2 = {test3: 'val3', test4: 'val4'}
@@ -58,6 +60,14 @@ describe.only('ObjectManage',function(){
     obj.load({test5: {test7: 'val7'}})
     expect(obj.get('test5.test6')).to.equal('val6')
     expect(obj.get('test5.test7')).to.equal('val7')
+  })
+  it('should be able to watch the data object',function(done){
+    var obj = new ObjectManage()
+    obj.once('load',function(data){
+      expect(data.test5.test6).to.equal('val6')
+      done()
+    })
+    obj.load(data3)
   })
   it('should count object depth accurately',function(){
     var testObject = {foo: {foo: {foo: 'baz'}}}

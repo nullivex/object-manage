@@ -18,13 +18,13 @@
   "unused": true,
   "trailing": true,
   "smarttabs": true,
+  "strict": true,
   "globals": {
     "describe": false,
     "it": false,
     "before": false,
     "beforeEach": false,
     "after": false,
-    "afterEach": false,
-    "expect": false
+    "afterEach": false
   }
 }
