@@ -1,7 +1,7 @@
 'use strict';
 var ObjectManage = require('../lib/ObjectManage')
   , expect = require('chai').expect
-describe.only('ObjectManage',function(){
+describe('ObjectManage',function(){
   var data1 = {test1: 'val1', test2: 'val2'}
     , data2 = {test3: 'val3', test4: 'val4'}
     , data3 = {test5: {test6: 'val6'}}
@@ -68,6 +68,17 @@ describe.only('ObjectManage',function(){
       done()
     })
     obj.load(data3)
+  })
+  it('should fail on circular referenced objects',function(){
+    var x = {
+      'a' : function () {return null}
+    }
+    x.b = x.a
+    var obj = new ObjectManage()
+    function load(){
+      obj.load(x)
+    }
+    expect(load).to.throw(Error)
   })
   it('should count object depth accurately',function(){
     var testObject = {foo: {foo: {foo: 'baz'}}}
