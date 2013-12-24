@@ -203,7 +203,7 @@ to `undefined`
 ```js
 var inst = new ObjectManage({mykey: {mykey2: 'myvalue'}})
 inst.exists('mykey.mykey2') //true
-inst.remove('mykey')
+inst.remove('mykey') //true
 inst.exists('mykey.mykey') //false
 ```
 
@@ -217,16 +217,96 @@ var obj = {foo: {foo: {foo: 'baz'}}}
 obj.countDepth(obj) //3
 ```
 
+## Events
+
+### Set
+
+Fired when a set is processed on the managed object
+
+** path -- Path to be set
+** value -- Value to be set to the path
+** valid -- If a validation function was used this is the validity of that result (boolean)
+
+```js
+var obj = new require('object-manage')()
+obj.on('set',function(path,value,valid){
+  valid = valid ? 'valid' : 'invalid'
+  console.log(a ' + valid + 'valid of (' + value + ') set to (' + path + ')')
+})
+obj.set('foo','bar')
+```
+
+### Get
+
+Fired when a get is processed on the managed object
+
+* path -- Path to be retrieved
+* value -- Value of the path retrieved
+
+```js
+var obj = new require('object-manage')()
+obj.on('get',function(path,value){
+  console.log(value + ' was retrieved from ' + path)
+})
+obj.get('foo')
+```
+
+### Exists
+
+Fired when an exists operation is performed
+
+* path -- Path that is being checked for existance
+* exists -- Result of exists check (boolean)
+
+```js
+var obj = new require('object-manage')()
+obj.on('exists',function(path,exists){
+  var does = exists ? 'does' : 'does not'
+  console.log('checked if ' + path + ' exists and it ' + does)
+})
+obj.exists('foo')
+```
+
+### Remove
+
+Fired when an remove operation is performed
+
+* path -- Path that is being checked for existance
+* removed -- Result of removal operation (boolean)
+
+```js
+var obj = new require('object-manage')()
+obj.on('exists',function(path,removed){
+  var successfully = removed ? 'successfully' : 'unsuccessfully'
+  console.log(successfully + ' removed path (' + path + ')')
+})
+obj.remove('foo')
+```
+
+### Load
+
+Fired when a load and merge is performed on the managed object
+
+* data -- Result of the load and merge
+
+```js
+var obj = new require('object-manage')()
+obj.on('load',function(data){
+  console.log('a merge was performed and the resulting data: ' + data)
+})
+obj.load({foo: 'bar'})
+```
+
 ## Changelog
 
 ### 0.5.0
-* ObjectManage is now an event emitter that fires the `load` event for watching data
-* Switched back to `object-merge` which should help on debugging bad objects for the default.
+* ObjectManage is now an event emitter that fires events for watching data see README for event types
+* **object-merge** selected as the default merge package.
 * Added switchable merger type based on desired environment.
 * Added testing against circular referenced objects
 * ObjectManage will not modify objects passed into and are decoupled
-* ObjectManage.merge protype function added so the merger can be overridden to allow customised usage.
-* ObjectManage.setValidate can be used to validate set calls with a userspace function.
+* ObjectManage.merge prototype function added so the merger can be overridden to allow customised usage.
+* ObjectManage.setValidate can be used to validate set calls with a user space function.
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`

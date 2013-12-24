@@ -69,6 +69,51 @@ describe('ObjectManage',function(){
     })
     obj.load(data3)
   })
+  it('should emit a set event',function(done){
+    var obj = new ObjectManage()
+    obj.once('set',function(path,value,valid){
+      expect(path).to.equal('foo')
+      expect(value).to.equal('baz')
+      expect(valid).to.equal(true)
+      done()
+    })
+    obj.set('foo','baz')
+  })
+  it('should emit a get event',function(done){
+    var obj = new ObjectManage(data1)
+    obj.once('get',function(path,value){
+      expect(path).to.equal('test1')
+      expect(value).to.equal('val1')
+      done()
+    })
+    obj.get('test1')
+  })
+  it('should emit an exists event',function(done){
+    var obj = new ObjectManage(data1)
+    obj.once('exists',function(path,exists){
+      expect(path).to.equal('foo')
+      expect(exists).to.equal(false)
+      done()
+    })
+    obj.exists('foo')
+  })
+  it('should emit a remove event',function(done){
+    var obj = new ObjectManage(data1)
+    obj.once('remove',function(path,removed){
+      expect(path).to.equal('test1')
+      expect(removed).to.equal(true)
+      done()
+    })
+    obj.remove('test1')
+  })
+  it('should emit a load event',function(done){
+    var obj = new ObjectManage()
+    obj.once('load',function(data){
+      expect(data.test1).to.equal('val1')
+      done()
+    })
+    obj.load(data1)
+  })
   it('should fail on circular referenced objects',function(){
     var x = {
       'a' : function () {return null}
