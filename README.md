@@ -162,6 +162,7 @@ check the validity of the value being set.
 var inst = new ObjectManage()
 inst.setValidate = function(path,value){
   if('foo' === path) return true
+  else return false
 }
 inst.set('foo','yes') //true
 inst.get('foo') //yes
