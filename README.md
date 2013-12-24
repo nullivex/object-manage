@@ -297,6 +297,20 @@ obj.on('load',function(data){
 obj.load({foo: 'bar'})
 ```
 
+### Warning
+
+Currently only fired when a merge is deeper than the maxDepth setting.
+
+* data -- The data object in use at the time of the warning
+* message -- The warning message that was thrown
+
+```js
+var obj = new require('object-manage')()
+obj.on('warning',function(data,message){
+  console.log('object-manage warning: ' + message)
+})
+
+
 ## Changelog
 
 ### 0.5.0
