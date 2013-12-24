@@ -153,6 +153,22 @@ inst.set('mykey','mydata') //{mykey: 'mydata'}
 inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 ```
 
+### Set Validate
+
+When set is called if a set validate function is defined it will be called to
+check the validity of the value being set.
+
+```js
+var inst = new ObjectManage()
+inst.setValidate = function(path,value){
+  if('foo' === path) return true
+}
+inst.set('foo','yes') //true
+inst.get('foo') //yes
+inst.set('bar') //false
+inst.get('bar') //undefined
+```
+
 ### Get Value
 
 Get will recursively set a path given by a string using dot notation.
@@ -209,6 +225,7 @@ obj.countDepth(obj) //3
 * Added testing against circular referenced objects
 * ObjectManage will not modify objects passed into and are decoupled
 * ObjectManage.merge protype function added so the merger can be overridden to allow customised usage.
+* ObjectManage.setValidate can be used to validate set calls with a userspace function.
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`
