@@ -231,7 +231,7 @@ Fired when a set is processed on the managed object
 var obj = new require('object-manage')()
 obj.on('set',function(path,value,valid){
   valid = valid ? 'valid' : 'invalid'
-  console.log(a ' + valid + 'valid of (' + value + ') set to (' + path + ')')
+  console.log('a ' + valid + ' value of (' + value + ') set to (' + path + ')')
 })
 obj.set('foo','bar')
 ```
