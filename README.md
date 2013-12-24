@@ -223,9 +223,9 @@ obj.countDepth(obj) //3
 
 Fired when a set is processed on the managed object
 
-** path -- Path to be set
-** value -- Value to be set to the path
-** valid -- If a validation function was used this is the validity of that result (boolean)
+* path -- Path to be set
+* value -- Value to be set to the path
+* valid -- If a validation function was used this is the validity of that result (boolean)
 
 ```js
 var obj = new require('object-manage')()
