@@ -54,6 +54,52 @@ obj.exists('bas') //false
 
 ```
 
+## Inheritance
+
+It is also useful to use ObjectManage as a superconstructor for libraries with options.
+
+Here is a quick example
+
+```js
+var ObjectManage = require('object-manage')
+  , util = require('util')
+
+var myObj = function(data){
+  ObjectManage.call(this,data)
+}
+util.inherits(myObj,ObjectManage)
+
+myObj.prototype.foo = function(){
+  console.log(this.data) //this.data managed by ObjectManage
+}
+```
+
+## Switching Merge Package
+
+In order to make object-manage more performance friendly in smaller environments
+the merger can easily be switched between **object-merge** for **merge-recursive**.
+**merge-recursive** will only merge pointers and thus when the object-manage instance
+is modified the original objects will be as well. We choose **object-merge** as the
+default because it will decouple from the objects being merged in. This comes with a
+performance and memory cost.
+
+To use **merge-recursive**
+
+```js
+var ObjectManage = require('object-manage')
+ObjectManage.prototype.merge = ObjectManage.prototype.mergeRecursive
+```
+
+It is also possible to implement one's own merging function.
+
+```js
+var ObjectManage = require('object-manage')
+ObjectManage.prototype.merge = function(obj1,obj2){
+  var mergedObject = obj2
+  return mergedObject
+}
+```
+
 ## API Reference
 
 ### Constructor
@@ -158,9 +204,11 @@ obj.countDepth(obj) //3
 
 ### 0.5.0
 * ObjectManage is now an event emitter that fires the `load` event for watching data
-* Switched back to `object-merge` which should help on debugging bad objects
+* Switched back to `object-merge` which should help on debugging bad objects for the default.
+* Added switchable merger type based on desired environment.
 * Added testing against circular referenced objects
 * ObjectManage will not modify objects passed into and are decoupled
+* ObjectManage.merge protype function added so the merger can be overridden to allow customised usage.
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`
