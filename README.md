@@ -309,7 +309,8 @@ var obj = new require('object-manage')()
 obj.on('warning',function(data,message){
   console.log('object-manage warning: ' + message)
 })
-
+obj.load(overlyDeepObject)
+```
 
 ## Changelog
 
