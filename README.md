@@ -153,14 +153,14 @@ inst.set('mykey','mydata') //{mykey: 'mydata'}
 inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 ```
 
-### Set Validate
+### Validate Set
 
 When set is called if a set validate function is defined it will be called to
 check the validity of the value being set.
 
 ```js
 var inst = new ObjectManage()
-inst.setValidate = function(path,value){
+inst.validateSet = function(path,value){
   if('foo' === path) return true
   else return false
 }
@@ -178,6 +178,23 @@ Get will recursively set a path given by a string using dot notation.
 var isnt = new ObjectManage({mykey: 'mydata', mykey2: {data: 'mydata'}})
 inst.get('mykey') //'mydata'
 inst.get('mykey2.data') //'mydata
+```
+
+### Validate Get
+
+When set is called if a set validate function is defined it will be called to
+check the validity of the value being set.
+
+```js
+var inst = new ObjectManage()
+inst.validateGet = function(path,value){
+  if('boo' === path) return true
+  else return false
+}
+inst.set('boo','yes') //true
+inst.set('foo','yes') //true
+inst.get('foo') //undefined
+inst.get('boo') //yes
 ```
 
 ### Path Exists
@@ -242,6 +259,7 @@ Fired when a get is processed on the managed object
 
 * path -- Path to be retrieved
 * value -- Value of the path retrieved
+** valid -- If a validation function was used this is the validity of that result (boolean)
 
 ```js
 var obj = new require('object-manage')()
@@ -321,7 +339,8 @@ obj.load(overlyDeepObject)
 * Added testing against circular referenced objects
 * ObjectManage will not modify objects passed into and are decoupled
 * ObjectManage.merge prototype function added so the merger can be overridden to allow customised usage.
-* ObjectManage.setValidate can be used to validate set calls with a user space function.
+* ObjectManage.validateGet can be used to validate set calls with a user space function.
+* ObjectManage.validateSet can be used to validate get calls with a user space function.
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`

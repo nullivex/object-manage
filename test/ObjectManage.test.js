@@ -114,6 +114,28 @@ describe('ObjectManage',function(){
     })
     obj.load(data1)
   })
+  it('should validate set calls',function(){
+    var obj = new ObjectManage()
+    obj.validateSet = function(path,value){
+      expect(path).to.equal('test1')
+      return ('val2' === value)
+    }
+    obj.set('test1','val2')
+    expect(obj.get('test1')).to.equal('val2')
+    obj.set('test1','val3')
+    expect(obj.get('test1')).to.equal('val2')
+  })
+  it('should validate get calls',function(){
+    var obj = new ObjectManage()
+    obj.validateGet = function(path,value){
+      expect(path).to.equal('test1')
+      return ('val2' === value)
+    }
+    obj.set('test1','val2')
+    expect(obj.get('test1')).to.equal('val2')
+    obj.set('test1','val3')
+    expect(obj.get('test1')).to.equal(undefined)
+  })
   it('should fail on circular referenced objects',function(){
     var x = {
       'a' : function () {return null}
