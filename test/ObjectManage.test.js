@@ -118,23 +118,36 @@ describe('ObjectManage',function(){
     var obj = new ObjectManage()
     obj.validateSet = function(path,value){
       expect(path).to.equal('test1')
-      return ('val2' === value)
+      if('val2' === value){
+        return value
+      } else {
+        throw new Error(path + ' must be set to val2')
+      }
     }
     obj.set('test1','val2')
     expect(obj.get('test1')).to.equal('val2')
-    obj.set('test1','val3')
-    expect(obj.get('test1')).to.equal('val2')
+    var doSet = function(){
+      obj.set('test1','val3')
+    }
+    expect(doSet).to.throw('test1 must be set to val2')
   })
   it('should validate get calls',function(){
     var obj = new ObjectManage()
     obj.validateGet = function(path,value){
       expect(path).to.equal('test1')
-      return ('val2' === value)
+      if('val2' === value){
+        return value
+      } else {
+        throw new Error(path + ' must have a value of val2')
+      }
     }
     obj.set('test1','val2')
     expect(obj.get('test1')).to.equal('val2')
     obj.set('test1','val3')
-    expect(obj.get('test1')).to.equal(undefined)
+    var doGet = function(){
+      obj.get('test1')
+    }
+    expect(doGet).to.throw('test1 must have a value of val2')
   })
   it('should fail on circular referenced objects',function(){
     var x = {

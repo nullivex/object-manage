@@ -158,16 +158,21 @@ inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 When set is called if a set validate function is defined it will be called to
 check the validity of the value being set.
 
+If the call should be rejected an **Exception** should be thrown. If the value
+should be modified return the value that should be set instead.
+
 ```js
 var inst = new ObjectManage()
 inst.validateSet = function(path,value){
-  if('foo' === path) return true
-  else return false
+  if('foo' === path && 'boolean' ~== typeof value){
+    throw new Error(path + ' must be boolean')
+  }
+  return value
 }
-inst.set('foo','yes') //true
-inst.get('foo') //yes
-inst.set('bar') //false
-inst.get('bar') //undefined
+inst.set('foo','yes') //Exception 'foo must be boolean'
+inst.get('foo') //undefined
+inst.set('bar','yes') //true
+inst.get('bar') //yes
 ```
 
 ### Get Value
@@ -185,16 +190,22 @@ inst.get('mykey2.data') //'mydata
 When set is called if a set validate function is defined it will be called to
 check the validity of the value being set.
 
+If the call should be rejected an **Exception** should be thrown. If the value
+should be modified return the value that should be passed back to the user.
+
 ```js
 var inst = new ObjectManage()
 inst.validateGet = function(path,value){
-  if('boo' === path) return true
-  else return false
+  if('boo' === path){
+    return 2
+  } else {
+    return value
+  }
 }
 inst.set('boo','yes') //true
 inst.set('foo','yes') //true
-inst.get('foo') //undefined
-inst.get('boo') //yes
+inst.get('foo') //yes
+inst.get('boo') //2
 ```
 
 ### Path Exists
