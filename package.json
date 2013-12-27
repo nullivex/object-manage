@@ -23,7 +23,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "object-merge": "~2.3.0",
+    "object-merge": "~2.5.1",
     "merge-recursive": "0.0.3"
   },
   "devDependencies": {
