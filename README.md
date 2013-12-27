@@ -100,6 +100,41 @@ ObjectManage.prototype.merge = function(obj1,obj2){
 }
 ```
 
+## Validation
+
+In order for object-manage to be useful in more hostile environments.
+It allows for validation functions to be defined per instance.
+
+Quick example of a validation function for setting values
+
+```js
+var obj = new ObjectManage()
+obj.validateSet = function(path,value){
+  //your validation code here that calls one of the below functions
+  //erroneous method that still processes the action
+  this.warn('should have passed a boolean',value)
+  //erroneous methods that will halt processing of the action
+  this.drop('value must be boolean')
+  this.reject('value must be boolean')
+  //will throw an exception that must be caught in user space
+  this.error('something bad happened')
+  //non erroneous return methods
+  this.ok(value)
+  //or
+  return value
+}
+```
+
+#### Verbs
+
+There are 5 verbs used to handle exceptions
+
+* **drop** -- Silently drop the set/get operation (returns undefined for get, set returns true)
+* **reject** -- Actively reject the set/get operation and issue an error back to the setter/getter
+* **warn** -- Accept the get/set request but still issue an error to the user.
+* **error** -- Treated like a regular exception and will be thrown upwards.
+* **ok** -- Only accepts the value to returned for processing
+
 ## API Reference
 
 ### Constructor
@@ -165,7 +200,7 @@ should be modified return the value that should be set instead.
 var inst = new ObjectManage()
 inst.validateSet = function(path,value){
   if('foo' === path && 'boolean' ~== typeof value){
-    throw new Error(path + ' must be boolean')
+    throw inst.drop(path + ' must be boolean')
   }
   return value
 }
@@ -326,17 +361,76 @@ obj.on('load',function(data){
 obj.load({foo: 'bar'})
 ```
 
-### Warning
+### Drop
 
-Currently only fired when a merge is deeper than the maxDepth setting.
+Fired when there is a validation `drop`
 
-* data -- The data object in use at the time of the warning
-* message -- The warning message that was thrown
+* verb -- The current action type (get,set)
+* message -- The warning message
+* path -- Path of the property being operated on
+* value -- The value being operated on
 
 ```js
 var obj = new require('object-manage')()
-obj.on('warning',function(data,message){
-  console.log('object-manage warning: ' + message)
+obj.on('drop',function(verb,message,path,value){
+  console.log('object-manage drop [' + verb + ':' + path + ']: ' + message)
+})
+obj.validateSet = function(path,value){
+  this.drop('not accepting anything')
+}
+obj.set('foo','will drop') //returns true
+```
+
+### Reject
+
+Fired when there is a validation `reject`
+
+* verb -- The current action type (get,set)
+* message -- The warning message
+* path -- Path of the property being operated on
+* value -- The value being operated on
+
+```js
+var obj = new require('object-manage')()
+obj.on('reject',function(verb,message,path,value){
+  console.log('object-manage reject [' + verb + ':' + path + ']: ' + message)
+})
+obj.validateSet = function(path,value){
+  this.reject('not accepting anything')
+}
+obj.set('foo','will drop') //returns false
+```
+
+### Warning
+
+Fired when there is a set/get/merge warning.
+
+* verb -- The current action type (get,set,merge)
+* message -- The warning message
+* path -- Path of the property being operated on (blank during merge warnings)
+* value -- The value being operated on (the value being merged in during a merge warning)
+
+```js
+var obj = new require('object-manage')()
+obj.on('warn',function(verb,message,path,value){
+  console.log('object-manage warning [' + verb + ']: ' + message)
+})
+obj.load(overlyDeepObject)
+```
+
+### Error
+
+Fired when there is a set/get/merge error.
+
+* verb -- The current action type (get,set,merge)
+* message -- The warning message
+* path -- Path of the property being operated on (blank during merge warnings)
+* value -- The value being operated on (the value being merged in during a merge warning)
+
+```js
+var obj = new require('object-manage')()
+obj.on('error',function(verb,message,path,value){
+  console.log('object-manage error [' + verb + ']: ' + message)
 })
 obj.load(overlyDeepObject)
 ```
@@ -348,10 +442,11 @@ obj.load(overlyDeepObject)
 * **object-merge** selected as the default merge package.
 * Added switchable merger type based on desired environment.
 * Added testing against circular referenced objects
-* ObjectManage will not modify objects passed into and are decoupled
+* ObjectManage will not modify objects passed into and are decoupled when using **object-merge**
 * ObjectManage.merge prototype function added so the merger can be overridden to allow customised usage.
 * ObjectManage.validateGet can be used to validate set calls with a user space function.
 * ObjectManage.validateSet can be used to validate get calls with a user space function.
+* Organized tests into groups for easier future additions.
 
 ### 0.4.0
 * Added max depth warning for recursive objects that would normally throw `Maximum call stack exceeded`
