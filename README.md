@@ -200,7 +200,7 @@ should be modified return the value that should be set instead.
 var inst = new ObjectManage()
 inst.validateSet = function(path,value){
   if('foo' === path && 'boolean' ~== typeof value){
-    throw inst.drop(path + ' must be boolean')
+    this.drop(path + ' must be boolean')
   }
   return value
 }
