@@ -6,6 +6,13 @@ describe('ObjectManage',function(){
     , data2 = {test3: 'val3', test4: 'val4'}
     , data3 = {test5: {test6: 'val6'}}
 
+  describe('Prototype',function(){
+    it('should have a merge function',function(){
+      expect(ObjectManage.prototype.hasOwnProperty('merge')).to.equal(true)
+      expect(ObjectManage.prototype.merge).to.be.a('function')
+    })
+  })
+
   describe('Construction',function(){
     it('should accept data to the constructor',function(){
       var obj = new ObjectManage(data1)

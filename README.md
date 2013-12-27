@@ -402,6 +402,9 @@ obj.load(overlyDeepObject)
 
 ## Changelog
 
+### 0.5.1
+* Fixed small prototype issue with .merge being set to Object instead of ObjectManage
+
 ### 0.5.0
 * ObjectManage is now an event emitter that fires events for watching data see README for event types
 * **object-merge** selected as the default merge package.
