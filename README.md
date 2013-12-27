@@ -125,7 +125,17 @@ obj.validateSet = function(path,value){
 }
 ```
 
-#### Verbs
+### Callbacks
+
+The following callbacks are available.
+
+* validateGet `ObjectManage.validateGet` -- Validate get directives
+* validateSet `ObjectManage.validateSet` -- Validate set directives
+* validateExists `ObjectManage.validateExists` -- Validate exists directives
+* validateRemove `ObjectManage.validateRemove` -- Validate remove directives
+* validateLoad `ObjectManage.validateLoad` -- Validate load directives
+
+### Verbs
 
 There are 5 verbs used to handle exceptions
 
@@ -188,28 +198,6 @@ inst.set('mykey','mydata') //{mykey: 'mydata'}
 inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 ```
 
-### Validate Set
-
-When set is called if a set validate function is defined it will be called to
-check the validity of the value being set.
-
-If the call should be rejected an **Exception** should be thrown. If the value
-should be modified return the value that should be set instead.
-
-```js
-var inst = new ObjectManage()
-inst.validateSet = function(path,value){
-  if('foo' === path && 'boolean' ~== typeof value){
-    this.drop(path + ' must be boolean')
-  }
-  return value
-}
-inst.set('foo','yes') //Exception 'foo must be boolean'
-inst.get('foo') //undefined
-inst.set('bar','yes') //true
-inst.get('bar') //yes
-```
-
 ### Get Value
 
 Get will recursively set a path given by a string using dot notation.
@@ -218,29 +206,6 @@ Get will recursively set a path given by a string using dot notation.
 var isnt = new ObjectManage({mykey: 'mydata', mykey2: {data: 'mydata'}})
 inst.get('mykey') //'mydata'
 inst.get('mykey2.data') //'mydata
-```
-
-### Validate Get
-
-When set is called if a set validate function is defined it will be called to
-check the validity of the value being set.
-
-If the call should be rejected an **Exception** should be thrown. If the value
-should be modified return the value that should be passed back to the user.
-
-```js
-var inst = new ObjectManage()
-inst.validateGet = function(path,value){
-  if('boo' === path){
-    return 2
-  } else {
-    return value
-  }
-}
-inst.set('boo','yes') //true
-inst.set('foo','yes') //true
-inst.get('foo') //yes
-inst.get('boo') //2
 ```
 
 ### Path Exists
@@ -444,8 +409,7 @@ obj.load(overlyDeepObject)
 * Added testing against circular referenced objects
 * ObjectManage will not modify objects passed into and are decoupled when using **object-merge**
 * ObjectManage.merge prototype function added so the merger can be overridden to allow customised usage.
-* ObjectManage.validateGet can be used to validate set calls with a user space function.
-* ObjectManage.validateSet can be used to validate get calls with a user space function.
+* Validation now supported on get, set, exists, load, and remove.
 * Organized tests into groups for easier future additions.
 
 ### 0.4.0

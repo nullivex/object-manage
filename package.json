@@ -10,6 +10,8 @@
     "object",
     "getter",
     "setter",
+    "exists",
+    "remove",
     "merge",
     "path",
     "recursive",
