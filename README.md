@@ -74,6 +74,99 @@ myObj.prototype.foo = function(){
 }
 ```
 
+## Storage
+
+By default **object-manage** uses an internal memory storage. However this can
+easily be changed to use a storage driver to persist the instance.
+
+### Bundled Drivers
+
+* Memory
+* Redis
+
+### Usage
+
+```js
+var handle = 'uuid'
+var obj = new ObjectManage()
+obj.setStorage({
+  driver: 'redis',
+  options: {
+    host: '127.0.0.1',
+    port: 6379,
+    secret: 'xyz'
+  }
+})
+obj.restore(handle)
+obj.data.foo = 1
+obj.save(function(err,handle){
+  if(err) throw err
+  console.log(handle)
+})
+```
+
+### Methods
+
+#### Set Storage
+
+To set the storage driver and options use the setStorage method. This method will
+automatically save the current object to the newly set options so data can still
+be passed to the constructor. If a string is passed it will be treated as the driver
+name and will not pass any options to the driver which assumes default.
+
+```js
+var obj = new ObjectManage()
+obj.setStorage('redis') // redis with default options
+obj.setStorage('memory') // revert back to the default
+obj.setStorage({
+  driver: 'redis',
+  options: {
+    host: '127.0.0.1',
+    port: 6379,
+    secret: 'xyz'
+  }
+})
+```
+
+#### Save
+
+Saves the state of the object into the storage driver. This is automatically called
+by set, get, remove, load.
+
+This is useful when the object is modified manually.
+
+```js
+var obj = new ObjectManage()
+obj.setStorage('redis')
+obj.data.foo = 1
+obj.save(function(err,handle,data){
+  if(err) throw err
+  console.log(handle) //prints the instance id
+  console.log(data.foo) //1
+})
+```
+
+#### Instance Handle
+
+To get the handle used to identify the instance use the getHandle method.
+The handle is automatically generated when a new instance is created.
+
+```js
+var obj = new ObjectManage()
+console.log(obj.getHandle()) //prints the instance handle which is a uuid
+```
+
+#### Restore
+
+To retrieve a saved instance of an object use the restore method. This is a
+static method that is not available to the instance.
+
+```js
+var handle = 'uuid'
+var obj = ObjectManage.restore(handle,'redis')
+``
+
+
 ## Switching Merge Package
 
 In order to make object-manage more performance friendly in smaller environments
@@ -401,6 +494,9 @@ obj.load(overlyDeepObject)
 ```
 
 ## Changelog
+
+### 0.6.0
+* Added support for storage drivers
 
 ### 0.5.1
 * Fixed small prototype issue with .merge being set to Object instead of ObjectManage
