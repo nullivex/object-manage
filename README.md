@@ -89,7 +89,7 @@ easily be changed to use a storage driver to persist the instance.
 ```js
 var handle = 'uuid'
 var obj = new ObjectManage()
-obj.setStorage({
+obj.storage({
   driver: 'redis',
   options: {
     host: '127.0.0.1',
@@ -98,7 +98,7 @@ obj.setStorage({
   }
 })
 obj.restore(handle)
-obj.data.foo = 1
+obj.set('foo',1)
 obj.save(function(err,handle){
   if(err) throw err
   console.log(handle)
@@ -107,7 +107,7 @@ obj.save(function(err,handle){
 
 ### Methods
 
-#### Set Storage
+#### Storage Setup
 
 To set the storage driver and options use the setStorage method. This method will
 automatically save the current object to the newly set options so data can still
@@ -116,9 +116,9 @@ name and will not pass any options to the driver which assumes default.
 
 ```js
 var obj = new ObjectManage()
-obj.setStorage('redis') // redis with default options
-obj.setStorage('memory') // revert back to the default
-obj.setStorage({
+obj.storage('redis') // redis with default options
+obj.storage('memory') // revert back to the default
+obj.storage({
   driver: 'redis',
   options: {
     host: '127.0.0.1',
@@ -128,16 +128,29 @@ obj.setStorage({
 })
 ```
 
+Storage setup also returns the instance so it can be chained on to the constructor.
+
+```js
+var obj = new ObjectManage().storage('redis')
+obj.set('foo','yes')
+obj.save(function(err){
+  if(err) throw err
+  process.exit()
+})
+```
+
 #### Save
 
-Saves the state of the object into the storage driver. This is automatically called
-by set, get, remove, load.
+Saves the state of the object into the storage driver.
 
-This is useful when the object is modified manually.
+If no handle is set using the `setHandle()` method then a handle
+will be automatically generated as a UUID. This handle is made available
+to the callback of the save function and will be available through the
+`getHandle()` method once the save has been initiated.
 
 ```js
 var obj = new ObjectManage()
-obj.setStorage('redis')
+obj.storage('redis')
 obj.data.foo = 1
 obj.save(function(err,handle,data){
   if(err) throw err
@@ -149,21 +162,36 @@ obj.save(function(err,handle,data){
 #### Instance Handle
 
 To get the handle used to identify the instance use the getHandle method.
-The handle is automatically generated when a new instance is created.
+The handle is automatically generated when a new instance is saved and no handle
+has been set.
 
 ```js
 var obj = new ObjectManage()
-console.log(obj.getHandle()) //prints the instance handle which is a uuid
+console.log(obj.getHandle()) //prints the instance handle
+```
+
+To set a custom handle used to identify the instance use the setHandle method.
+
+```js
+var obj = new ObjectManage()
+obj.storage('redis')
+obj.setHandle('foo')
+obj.set('bar','baz')
+obj.save(function(err,handle,data){
+  if(err) throw err
+  console.log(handle) //foo
+  console.log(data.bar) //baz
+})
 ```
 
 #### Restore
 
-To retrieve a saved instance of an object use the restore method. This is a
-static method that is not available to the instance.
+To retrieve a saved instance of an object use the restore method.
 
 ```js
 var handle = 'uuid'
-var obj = ObjectManage.restore(handle,'redis')
+var obj = new ObjectManage().storage('redis')
+obj.restore(handle)
 ```
 
 ## Switching Merge Package
