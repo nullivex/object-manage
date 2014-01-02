@@ -398,7 +398,7 @@ describe('ObjectManage',function(){
     })
   })
 
-  describe.only('Storage Drivers',function(){
+  describe('Storage Drivers',function(){
     it('should return the instance so the storage method can be chained',function(){
       var obj = new ObjectManage().storage('memory')
       expect(obj).to.be.an.instanceof(ObjectManage)
@@ -455,7 +455,22 @@ describe('ObjectManage',function(){
         })
       })
     })
-    describe('Redis Driver',function(){
+    describe('Redis Driver',function(done){
+      it('should connect with full options',function(){
+        var options = {
+          driver: 'redis',
+          options: {
+            host: '127.0.0.1',
+            port: 6379
+          },
+          ready: function(err){
+            if(err) throw err
+            console.log('redis is ready')
+            done()
+          }
+        }
+        new ObjectManage().storage(options)
+      })
       it('should save with the redis driver',function(done){
         var obj = new ObjectManage().storage('redis')
         obj.set('foo','yes')

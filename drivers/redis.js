@@ -3,7 +3,7 @@ var StorageDriver = require('../lib/StorageDriver')
   , redis = require('redis')
 
 var driver = StorageDriver.create('redis')
-driver.prototype.setup = function(options){
+driver.prototype.setup = function(options,next){
   if('object' !== typeof options) options = {}
   var port = options.port || 6379
     , host = options.host || '127.0.0.1'
@@ -15,6 +15,9 @@ driver.prototype.setup = function(options){
       if(err) throw err
     })
   }
+  driver.handle.on('ready',function(){
+    next()
+  })
 }
 driver.prototype.save = function(handle,data,next){
   driver.handle.set(handle,JSON.stringify(data),function(err){

@@ -124,6 +124,10 @@ obj.storage({
     host: '127.0.0.1',
     port: 6379,
     secret: 'xyz'
+  },
+  ready: function(err){
+    if(err) throw err
+    console.log('redis is ready')
   }
 })
 ```
@@ -191,7 +195,10 @@ To retrieve a saved instance of an object use the restore method.
 ```js
 var handle = 'uuid'
 var obj = new ObjectManage().storage('redis')
-obj.restore(handle)
+obj.restore(handle,function(err,data){
+  if(err) throw err
+  console.log(data)
+})
 ```
 
 ### Drivers
@@ -202,29 +209,30 @@ Create a driver.
 
 ```js
 var myStorageDriver = ObjectManage.StorageDriver.create('myStorageDriver')
-myStorageDriver.setup = function(options){
+var store = {}
+myStorageDriver.prototype.setup = function(options){
   //connect here
 }
-myStorageDriver.save = function(handle,data,next){
+myStorageDriver.prototype.save = function(handle,data,next){
   //save here
+  store[handle] = data
   next()
 }
-myStorageDriver.restore = function(handle,next){
+myStorageDriver.prototype.restore = function(handle,next){
   //restore here
-  var data = {} //restored data
-  next(null,data)
+  next(null,store[handle])
 }
-myStorageDriver.flush = function(handle,next){
+myStorageDriver.prototype.flush = function(handle,next){
   //flush here
-  next(null)
+  delete store[handle]
+  next()
 }
 ```
 
 Using the driver
 
 ```js
-var options = {host: '127.0.0.1'}
-var obj = new ObjectManage().storage(new myStorageDriver(options))
+var obj = new ObjectManage().storage(new myStorageDriver())
 ```
 
 ## Switching Merge Package
