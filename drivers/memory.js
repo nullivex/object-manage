@@ -1,8 +1,7 @@
 'use strict';
 var StorageDriver = require('../lib/StorageDriver')
 
-var driver = StorageDriver.create()
-driver.name = 'memory'
+var driver = StorageDriver.create('memory')
 driver.save = function(handle,data,next){
   next()
 }

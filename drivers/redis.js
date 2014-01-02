@@ -2,8 +2,7 @@
 var StorageDriver = require('../lib/StorageDriver')
   , redis = require('redis')
 
-var driver = StorageDriver.create()
-driver.name = 'redis'
+var driver = StorageDriver.create('redis')
 driver.setup = function(options){
   if('object' !== typeof options) options = {}
   var port = options.port || 6379
