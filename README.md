@@ -487,6 +487,61 @@ obj.on('load',function(data){
 obj.load({foo: 'bar'})
 ```
 
+### Generate Handle
+
+Fired when a handle is generated for the instance
+
+```js
+var obj = new require('object-manage')()
+obj.on('generateHandle',function(handle){
+  console.log('a handle was generated: ' + handle)
+})
+obj.generateHandle()
+```
+
+### Save
+
+Fired when a save to the storage driver is called
+
+```js
+var obj = new require('object-manage')()
+obj.on('save',function(err,handle,data){
+  if(err) throw err
+  console.log(handle) //foo
+  console.log(data.foo) //yes
+})
+obj.set('foo','yes')
+obj.setHandle('foo')
+obj.save()
+```
+
+### Restore
+
+Fired when a restore to the storage driver is called
+
+```js
+var obj = new require('object-manage')()
+obj.on('restore',function(err,data){
+  if(err) throw err
+  console.log(data.foo) //yes
+})
+obj.restore('foo')
+```
+
+### Flush
+
+Fired when a flush to the storage driver is called
+
+```js
+var obj = new require('object-manage')()
+obj.on('flush',function(err){
+  if(err) throw err
+  console.log('flushed instance')
+})
+obj.restore('foo')
+obj.flush()
+```
+
 ### Drop
 
 Fired when there is a validation `drop`

@@ -517,6 +517,57 @@ describe('ObjectManage',function(){
         })
       })
     })
-
+    describe('Storage Events',function(){
+      it('should emit a generateHandle event',function(done){
+        var obj = new ObjectManage()
+        obj.once('generateHandle',function(handle){
+          expect(handle).to.not.equal(null)
+          done()
+        })
+        obj.generateHandle()
+      })
+      it('should emit a save event',function(done){
+        var obj = new ObjectManage()
+        obj.once('save',function(handle,data){
+          expect(handle).to.not.equal(null)
+          expect(data.foo).to.equal('yes')
+          done()
+        })
+        obj.set('foo','yes')
+        obj.save()
+      })
+      it('should emit a restore event',function(done){
+        var obj1 = new ObjectManage()
+        obj1.set('foo','yes')
+        obj1.save(function(err,handle){
+          if(err) throw err
+          var obj = new ObjectManage()
+          obj.once('restore',function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            done()
+          })
+          obj.restore(handle)
+        })
+      })
+      it('should emit a flush event',function(done){
+        var obj1 = new ObjectManage()
+        obj1.set('foo','yes')
+        obj1.save(function(err,handle){
+          if(err) throw err
+          var obj = new ObjectManage()
+          obj.once('restore',function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            obj.once('flush',function(err){
+              if(err) throw err
+              done()
+            })
+            obj.flush()
+          })
+          obj.restore(handle)
+        })
+      })
+    })
   })
 })
