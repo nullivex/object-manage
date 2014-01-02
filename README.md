@@ -194,6 +194,34 @@ var obj = new ObjectManage().storage('redis')
 obj.restore(handle)
 ```
 
+### Drivers
+
+Implementing user space drivers is simple as well.
+
+Create a driver.
+
+```js
+var myStorageDriver = new ObjectManage.StorageDriver('myStorageDriver')
+myStorageDriver.setup(function(options){
+  //connect here
+})
+myStorageDriver.save(function(handle,data,next){
+  //save here
+  next()
+})
+myStorageDriver.restore(function(handle,next){
+  //restore here
+  var data = {} //restored data
+  next(null,data)
+})
+```
+
+Using the driver
+
+```js
+var obj = new ObjectManage().storage(new myStorageDriver())
+```
+
 ## Switching Merge Package
 
 In order to make object-manage more performance friendly in smaller environments
