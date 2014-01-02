@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "object-merge": "~2.5.1",
-    "merge-recursive": "0.0.3"
+    "merge-recursive": "0.0.3",
+    "redis": "~0.10.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
