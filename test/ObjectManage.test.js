@@ -398,4 +398,110 @@ describe('ObjectManage',function(){
     })
   })
 
+  describe.only('Storage Drivers',function(){
+    it('should return the instance so the storage method can be chained',function(){
+      var obj = new ObjectManage().storage('memory')
+      expect(obj).to.be.an.instanceof(ObjectManage)
+    })
+    it('should allow setting a handle',function(){
+      var obj = new ObjectManage().storage('memory')
+      obj.setHandle('foo')
+      expect(obj.getHandle()).to.equal('foo')
+    })
+    describe('Memory Driver',function(){
+      it('should save with the memory driver',function(done){
+        var obj = new ObjectManage()
+        obj.set('foo','yes')
+        obj.save(function(err,handle,data){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          expect(data.foo).to.equal('yes')
+          done()
+        })
+      })
+      it('should restore with the memory driver',function(done){
+        var obj = new ObjectManage()
+        obj.set('foo','yes')
+        obj.save(function(err,handle){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          //try to restore the object
+          var obj2 = new ObjectManage()
+          obj2.restore(handle,function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            expect(obj2.get('foo')).to.equal('yes')
+            done()
+          })
+        })
+      })
+      it('should flush with the memory driver',function(done){
+        var obj = new ObjectManage()
+        obj.set('foo','yes')
+        obj.save(function(err,handle){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          //try to restore the object
+          var obj2 = new ObjectManage()
+          obj2.restore(handle,function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            expect(obj2.get('foo')).to.equal('yes')
+            obj2.flush(function(err){
+              if(err) throw err
+              done()
+            })
+          })
+        })
+      })
+    })
+    describe('Redis Driver',function(){
+      it('should save with the redis driver',function(done){
+        var obj = new ObjectManage().storage('redis')
+        obj.set('foo','yes')
+        obj.save(function(err,handle,data){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          expect(data.foo).to.equal('yes')
+          done()
+        })
+      })
+      it('should restore with the redis driver',function(done){
+        var obj = new ObjectManage().storage('redis')
+        obj.set('foo','yes')
+        obj.save(function(err,handle){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          //try to restore the object
+          var obj2 = new ObjectManage().storage('redis')
+          obj2.restore(handle,function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            expect(obj2.get('foo')).to.equal('yes')
+            done()
+          })
+        })
+      })
+      it('should flush with the redis driver',function(done){
+        var obj = new ObjectManage().storage('redis')
+        obj.set('foo','yes')
+        obj.save(function(err,handle){
+          if(err) throw err
+          expect(handle).to.not.equal(null)
+          //try to restore the object
+          var obj2 = new ObjectManage().storage('redis')
+          obj2.restore(handle,function(err,data){
+            if(err) throw err
+            expect(data.foo).to.equal('yes')
+            expect(obj2.get('foo')).to.equal('yes')
+            obj2.flush(function(err){
+              if(err) throw err
+              done()
+            })
+          })
+        })
+      })
+    })
+
+  })
 })
