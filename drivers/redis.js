@@ -1,13 +1,8 @@
 'use strict';
 var StorageDriver = require('../lib/StorageDriver')
-  , util = require('util')
   , redis = require('redis')
 
-var driver = function(options){
-  StorageDriver.call(this,options)
-}
-util.inherits(driver,StorageDriver)
-
+var driver = StorageDriver.create()
 driver.name = 'redis'
 driver.setup = function(options){
   if('object' !== typeof options) options = {}
@@ -32,4 +27,4 @@ driver.flush = function(handle,next){
   driver.handle.set(handle,undefined,next)
 }
 
-module.exports = exports = driver
+module.exports = driver

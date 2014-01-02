@@ -201,25 +201,30 @@ Implementing user space drivers is simple as well.
 Create a driver.
 
 ```js
-var myStorageDriver = new ObjectManage.StorageDriver('myStorageDriver')
-myStorageDriver.setup(function(options){
+var myStorageDriver = ObjectManage.StorageDriver.create('myStorageDriver')
+myStorageDriver.setup = function(options){
   //connect here
-})
-myStorageDriver.save(function(handle,data,next){
+}
+myStorageDriver.save = function(handle,data,next){
   //save here
   next()
-})
-myStorageDriver.restore(function(handle,next){
+}
+myStorageDriver.restore = function(handle,next){
   //restore here
   var data = {} //restored data
   next(null,data)
-})
+}
+myStorageDriver.flush = function(handle,next){
+  //flush here
+  next(null)
+}
 ```
 
 Using the driver
 
 ```js
-var obj = new ObjectManage().storage(new myStorageDriver())
+var options = {host: '127.0.0.1'}
+var obj = new ObjectManage().storage(new myStorageDriver(options))
 ```
 
 ## Switching Merge Package
