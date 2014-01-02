@@ -164,8 +164,7 @@ static method that is not available to the instance.
 ```js
 var handle = 'uuid'
 var obj = ObjectManage.restore(handle,'redis')
-``
-
+```
 
 ## Switching Merge Package
 
