@@ -93,7 +93,7 @@ This is also the internal format that all others normalize to.
 
 **Example**
 ```js
-var path = 'level1.level2.level3`
+var path = 'level1.level2.level3'
 obj.get(path)
 ```
 
