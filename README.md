@@ -52,6 +52,13 @@ obj.exists('badkey') //false
 obj.remove('bas')
 obj.exists('bas') //false
 
+//reset
+obj.reset()
+
+//path as an array
+obj.set(['foo','test'],'yes')
+obj.get('foo.test') //yes
+
 ```
 
 ## Inheritance
@@ -72,6 +79,68 @@ util.inherits(myObj,ObjectManage)
 myObj.prototype.foo = function(){
   console.log(this.data) //this.data managed by ObjectManage
 }
+```
+
+## Path Normalization
+
+Paths can be passed in many different formats to allow for more programatic usage
+of object-manage.
+
+### String
+
+The most common path format is a dot separated set of paths separated by a period.
+This is also the internal format that all others normalize to.
+
+**Example**
+```js
+var path = 'level1.level2.level3`
+obj.get(path)
+```
+
+### Array
+
+An array of path parts can also be passed
+
+**Example**
+```js
+var path = ['level1','level2','level3']
+obj.get(path)
+```
+
+### Function
+
+A function may be passed that returns a string
+
+**Example**
+```js
+var path = function(){
+  return 'level1.level2.level3'
+}
+obj.get(path)
+```
+
+The function can also return an array of parts
+
+**Example**
+```js
+var path = function(){
+  return ['level1','level2','level3']
+}
+obj.get(path)
+```
+
+### Object
+
+An object that has a `toString` method can also be used.
+
+**Example**
+```js
+var path = {
+  toString: function(){
+    return 'level1.level2.level3'
+  }
+}
+obj.get(path)
 ```
 
 ## Storage
@@ -621,6 +690,7 @@ obj.load(overlyDeepObject)
 ### 0.6.0
 * Added support for storage drivers
 * Added `reset` method
+* Added path normalization
 
 ### 0.5.1
 * Fixed small prototype issue with .merge being set to Object instead of ObjectManage

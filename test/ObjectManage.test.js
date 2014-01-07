@@ -47,6 +47,28 @@ describe('ObjectManage',function(){
     })
   })
 
+  describe('Path Normalization',function(){
+    var obj
+    beforeEach(function(){
+      obj = new ObjectManage(data3)
+    })
+    it('should allow a period separated string',function(){
+      expect(obj.get('test5.test6')).to.equal('val6')
+    })
+    it('should allow an array of path parts',function(){
+      expect(obj.get(['test5','test6'])).to.equal('val6')
+    })
+    it('should allow a function that returns a path',function(){
+      expect(obj.get(function(){return 'test5.test6'})).to.equal('val6')
+    })
+    it('should allow a function to return an array of path parts',function(){
+      expect(obj.get(function(){return ['test5','test6']})).to.equal('val6')
+    })
+    it('should allow a toString of an object that returns a path',function(){
+      expect(obj.get({toString: function(){return 'test5.test6'}})).to.equal('val6')
+    })
+  })
+
   describe('Removal and Existence',function(){
     it('should return true if the property exists',function(){
       var obj = new ObjectManage(data1)
