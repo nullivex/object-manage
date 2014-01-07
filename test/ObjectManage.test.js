@@ -61,6 +61,11 @@ describe('ObjectManage',function(){
       obj.remove('test5')
       expect(obj.data.hasOwnProperty('test5')).to.equal(false)
     })
+    it('should reset the data object',function(){
+      var obj = new ObjectManage([data1,data2,data3])
+      obj.reset()
+      expect(obj.get('test1')).to.equal(undefined)
+    })
   })
 
   describe('Merging',function(){

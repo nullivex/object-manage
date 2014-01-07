@@ -620,6 +620,7 @@ obj.load(overlyDeepObject)
 
 ### 0.6.0
 * Added support for storage drivers
+* Added `reset` method
 
 ### 0.5.1
 * Fixed small prototype issue with .merge being set to Object instead of ObjectManage
