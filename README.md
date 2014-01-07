@@ -63,7 +63,7 @@ obj.get('foo.test') //yes
 
 ## Inheritance
 
-It is also useful to use ObjectManage as a superconstructor for libraries with options.
+It is also useful to use ObjectManage as a super constructor for libraries with options.
 
 Here is a quick example
 
