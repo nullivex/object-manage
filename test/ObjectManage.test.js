@@ -45,7 +45,33 @@ describe('ObjectManage',function(){
       var obj = new ObjectManage(data1)
       expect(obj.get('test5.test6')).to.equal(undefined)
     })
-    it('should return a path tree as an array')
+    it('should return a path tree as an array',function(){
+      var obj = new ObjectManage(
+        data1,
+        data2,
+        data3,
+        {
+          test7: {
+            test8: {
+              test9: 'foo',
+              test10: 'bar'
+            }
+          }
+        }
+      )
+      expect(obj.getPaths()).to.include.members([
+        'test1',
+        'test2',
+        'test3',
+        'test4',
+        'test5',
+        'test5.test6',
+        'test7',
+        'test7.test8',
+        'test7.test8.test9',
+        'test7.test8.test10'
+      ])
+    })
   })
 
   describe('Path Normalization',function(){

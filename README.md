@@ -59,6 +59,9 @@ obj.reset()
 obj.set(['foo','test'],'yes')
 obj.get('foo.test') //yes
 
+//see paths currently in object
+obj.getPaths() // ['foo','foo.test']
+
 ```
 
 ## Inheritance
