@@ -330,6 +330,10 @@ ObjectManage.prototype.merge = function(obj1,obj2){
 }
 ```
 
+**NOTICE** Be careful when changing this as it can have unexpected results on other packages
+that may depend on ObjectManage. It would be best to only override the merge value of the
+specific instance rather than the prototype.
+
 ## Validation
 
 In order for object-manage to be useful in more hostile environments.
@@ -380,7 +384,7 @@ There are 5 verbs used to handle exceptions
 ### Constructor
 
 The constructor sets up the object to be managed and accepts
-the a single argument that gets passed to `ObjectManage.load(data)`
+the a arbitrary numbers of arguments that get passed to `ObjectManage.load()`
 
 ```js
 var data = {foo: 'foo'}
@@ -401,7 +405,7 @@ inst.load({mykey: 'mydata'})
 inst.load({mykey2: 'mydata2'})
 ```
 
-Load will also accept an array of objects that will
+Load will also accept an arbitrary numbers of objects that will
 be merged on top of each other in order.
 
 ```js
@@ -409,13 +413,7 @@ var data1 = {test1: 'val1', test2: 'val2'}
   , data2 = {test3: 'val3', test4: 'val4'}
   , data3 = {test5: {test6: 'val6'}}
 var inst = new ObjectManage()
-inst.load([data1,data2,data3])
-```
-
-It can even be a recursive array
-
-```js
-inst.load([data1,[data2,data3]])
+inst.load(data1,data2,data3)
 ```
 
 ### Set Value
@@ -556,6 +554,20 @@ obj.on('load',function(data){
 obj.load({foo: 'bar'})
 ```
 
+### Get Paths
+
+It may be useful to be able to iterate the paths that are contained within the managed
+object.
+
+In order to do this use the `ObjectManage.getPaths()` method.
+
+Example
+```js
+var obj = new ObjectManage()
+obj.load({foo: {bar: 'baz'}})
+obj.getPaths() // ['foo','foo.bar']
+````
+
 ### Generate Handle
 
 Fired when a handle is generated for the instance
@@ -686,6 +698,12 @@ obj.load(overlyDeepObject)
 ```
 
 ## Changelog
+
+### 0.7.0
+* Fixes #2 load and the constructor now accept multiple arguments rather than an array of objects.
+The previous would cause problems when passing an actual array to the object manager.
+* Added feature to print the topology of a managed object in an array of dot separated paths.
+Use `ObjectManage.getTopology()`
 
 ### 0.6.0
 * Added support for storage drivers

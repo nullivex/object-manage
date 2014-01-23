@@ -20,7 +20,7 @@ describe('ObjectManage',function(){
       expect(obj.data.test2).to.equal('val2')
     })
     it('should be able to merge in data after constructing',function(){
-      var obj = new ObjectManage([data1,data2])
+      var obj = new ObjectManage(data1,data2)
       expect(obj.data.test3).to.equal('val3')
       expect(obj.data.test4).to.equal('val4')
     })
@@ -28,16 +28,16 @@ describe('ObjectManage',function(){
 
   describe('Setters and Getters',function(){
     it('should be able to get a nested key',function(){
-      var obj = new ObjectManage([data1,data3])
+      var obj = new ObjectManage(data1,data3)
       expect(obj.get('test5.test6')).to.equal('val6')
     })
     it('should be able to set a nested key',function(){
-      var obj = new ObjectManage([data1,data3])
+      var obj = new ObjectManage(data1,data3)
       obj.set('test5.test7','val7')
       expect(obj.data.test5.test7).to.equal('val7')
     })
     it('should overwrite a key to object if nested below',function(){
-      var obj = new ObjectManage([data1,data2,data3])
+      var obj = new ObjectManage(data1,data2,data3)
       obj.set('test5.test6.new','val8')
       expect(obj.data.test5.test6.new).to.equal('val8')
     })
@@ -45,6 +45,7 @@ describe('ObjectManage',function(){
       var obj = new ObjectManage(data1)
       expect(obj.get('test5.test6')).to.equal(undefined)
     })
+    it('should return a path tree as an array')
   })
 
   describe('Path Normalization',function(){
@@ -79,12 +80,12 @@ describe('ObjectManage',function(){
       expect(obj.exists('test1')).to.equal(false)
     })
     it('should remove a property and all its children',function(){
-      var obj = new ObjectManage([data1,data2,data3])
+      var obj = new ObjectManage(data1,data2,data3)
       obj.remove('test5')
       expect(obj.data.hasOwnProperty('test5')).to.equal(false)
     })
     it('should reset the data object',function(){
-      var obj = new ObjectManage([data1,data2,data3])
+      var obj = new ObjectManage(data1,data2,data3)
       obj.reset()
       expect(obj.get('test1')).to.equal(undefined)
     })
@@ -97,7 +98,7 @@ describe('ObjectManage',function(){
       expect(obj.data).to.be.an('object')
     })
     it('should return the whole object if no argument if passed to get',function(){
-      var obj = new ObjectManage([data1,data2,data3])
+      var obj = new ObjectManage(data1,data2,data3)
       expect(Object.keys(obj.get()).length).to.equal(5)
     })
     it('should merge recursively',function(){
