@@ -706,7 +706,7 @@ obj.load(overlyDeepObject)
 * Fixes #2 load and the constructor now accept multiple arguments rather than an array of objects.
 The previous would cause problems when passing an actual array to the object manager.
 * Added feature to print the topology of a managed object in an array of dot separated paths.
-Use `ObjectManage.getTopology()`
+Use `ObjectManage.getPaths()`
 
 ### 0.6.0
 * Added support for storage drivers
