@@ -704,7 +704,8 @@ obj.load(overlyDeepObject)
 
 ### 0.7.0
 * Fixes #2 load and the constructor now accept multiple arguments rather than an array of objects.
-The previous would cause problems when passing an actual array to the object manager.
+The previous would cause problems when passing an actual array to the object manager. This change breaks
+backwards compatibility and will require upgraded code that passes arrays of objects.
 * Added feature to print the topology of a managed object in an array of dot separated paths.
 Use `ObjectManage.getPaths()`
 
