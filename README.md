@@ -473,6 +473,20 @@ var obj = {foo: {foo: {foo: 'baz'}}}
 obj.countDepth(obj) //3
 ```
 
+### Get Paths
+
+It may be useful to be able to iterate the paths that are contained within the managed
+object.
+
+In order to do this use the `ObjectManage.getPaths()` method.
+
+Example
+```js
+var obj = new ObjectManage()
+obj.load({foo: {bar: 'baz'}})
+obj.getPaths() // ['foo','foo.bar']
+````
+
 ## Events
 
 ### Set
@@ -553,20 +567,6 @@ obj.on('load',function(data){
 })
 obj.load({foo: 'bar'})
 ```
-
-### Get Paths
-
-It may be useful to be able to iterate the paths that are contained within the managed
-object.
-
-In order to do this use the `ObjectManage.getPaths()` method.
-
-Example
-```js
-var obj = new ObjectManage()
-obj.load({foo: {bar: 'baz'}})
-obj.getPaths() // ['foo','foo.bar']
-````
 
 ### Generate Handle
 
