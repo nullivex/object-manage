@@ -401,6 +401,14 @@ describe('ObjectManage',function(){
         , obj = new ObjectManage()
       expect(obj.countDepth(testObject)).to.equal(3)
     })
+    it('should not mistake object length for depth',function(){
+      var testObject = {}
+      for(var i = 0; i < 100; i++){
+        testObject[i] = {name: 'foo'}
+      }
+      var obj = new ObjectManage()
+      expect(obj.countDepth(testObject)).to.equal(2)
+    })
     it('should warn on objects more than 50 levels deep',function(){
       //setup console mocking
       var oldLog = console.log

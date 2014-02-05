@@ -3,7 +3,7 @@
   "description": "A library for managing javascript objects and offering common getter, setter, merge support.",
   "homepage": "https://github.com/snailjs/object-manage",
   "bugs": "https://github.com/snailjs/object-manage/issues",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Bryan Tong <contact@nullivex.com>",
   "license": "MIT",
   "keywords": [

@@ -702,6 +702,9 @@ obj.load(overlyDeepObject)
 
 ## Changelog
 
+### 0.7.1
+* Fixes #3 where object length would be mistaken for object depth. Also uses a quicker depth counting function.
+
 ### 0.7.0
 * Fixes #2 load and the constructor now accept multiple arguments rather than an array of objects.
 The previous would cause problems when passing an actual array to the object manager. This change breaks
