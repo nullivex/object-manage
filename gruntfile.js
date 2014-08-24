@@ -1,4 +1,10 @@
 'use strict';
+
+
+/**
+ * Grunt
+ * @param {object} grunt
+ */
 module.exports = function(grunt){
 
   //config

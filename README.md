@@ -5,6 +5,16 @@ A library for managing javascript objects and offering common getter, setter, me
 
 Works great for managing config objects and libraries that have options.
 
+## > 0.8.x
+
+As of 0.8.x the API was completely reimagined so that ObjectManage would only extend the object.
+Allowing it to be passed and used like any other object but with extended functionality.
+
+This breaks all implementations of the 0.7.x branch which has been split to be maintained separately.
+
+The main change is that the `ObjectManage.data` storage object has been moved to the root and all the
+extension methods are now prefixed with `$` eg: `var obj = new ObjectManage(); obj.$get('foo');`
+
 ## Installation
 
 ```
@@ -27,40 +37,53 @@ var obj = new ObjectManage({box: 'square'})
 
 //watch data
 var mydata = {}
-obj.on('load',function(data){
+obj.$on('load',function(data){
   mydata = data
 })
 
 //load in data
-obj.load({foo: 'bar'})
+obj.$load({foo: 'bar'})
 
 //set a path
-obj.set('bas.boo','foo1')
+obj.$set('bas.boo','foo1')
 
 //get a path
-obj.get('bas') //{boo: 'foo1'}
-obj.get('bas.boo') //'foo1'
+obj.$get('bas') //{boo: 'foo1'}
+obj.$get('bas.boo') //'foo1'
 
 //access data directly
-console.log(obj.data.bas.boo) //'foo1'
+console.log(obj.bas.boo) //'foo1'
 
 //check if a path exists
-obj.exists('bas') //true
-obj.exists('badkey') //false
+obj.$exists('bas') //true
+obj.$exists('badkey') //false
 
 //remove a path
-obj.remove('bas')
-obj.exists('bas') //false
+obj.$remove('bas')
+obj.$exists('bas') //false
 
 //reset
-obj.reset()
+obj.$reset()
+
 
 //path as an array
-obj.set(['foo','test'],'yes')
-obj.get('foo.test') //yes
+obj.$set(['foo','test'],'yes')
+obj.$get('foo.test') //yes
 
 //see paths currently in object
-obj.getPaths() // ['foo','foo.test']
+obj.$getPaths() // ['foo','foo.test']
+
+//clone the object
+var clone = ObjectManage.$clone(obj)
+
+//create a new object
+var obj2 = {foo: 'test'}
+
+//extend that object
+obj2 = ObjectManage.$extend(obj2)
+
+//remove extension
+obj2 = obj2.$strip()
 
 ```
 
@@ -79,7 +102,7 @@ var myObj = function(data){
 }
 util.inherits(myObj,ObjectManage)
 
-myObj.prototype.foo = function(){
+myObj.prototype.$foo = function(){
   console.log(this.data) //this.data managed by ObjectManage
 }
 ```
@@ -97,7 +120,7 @@ This is also the internal format that all others normalize to.
 **Example**
 ```js
 var path = 'level1.level2.level3'
-obj.get(path)
+obj.$get(path)
 ```
 
 ### Array
@@ -107,7 +130,7 @@ An array of path parts can also be passed
 **Example**
 ```js
 var path = ['level1','level2','level3']
-obj.get(path)
+obj.$get(path)
 ```
 
 ### Function
@@ -119,7 +142,7 @@ A function may be passed that returns a string
 var path = function(){
   return 'level1.level2.level3'
 }
-obj.get(path)
+obj.$get(path)
 ```
 
 The function can also return an array of parts
@@ -129,7 +152,7 @@ The function can also return an array of parts
 var path = function(){
   return ['level1','level2','level3']
 }
-obj.get(path)
+obj.$get(path)
 ```
 
 ### Object
@@ -143,7 +166,7 @@ var path = {
     return 'level1.level2.level3'
   }
 }
-obj.get(path)
+obj.$get(path)
 ```
 
 ## Storage
@@ -161,7 +184,7 @@ easily be changed to use a storage driver to persist the instance.
 ```js
 var handle = 'uuid'
 var obj = new ObjectManage()
-obj.storage({
+obj.$storage({
   driver: 'redis',
   options: {
     host: '127.0.0.1',
@@ -169,9 +192,9 @@ obj.storage({
     secret: 'xyz'
   }
 })
-obj.restore(handle)
-obj.set('foo',1)
-obj.save(function(err,handle){
+obj.$restore(handle)
+obj.$set('foo',1)
+obj.$save(function(err,handle){
   if(err) throw err
   console.log(handle)
 })
@@ -188,9 +211,9 @@ name and will not pass any options to the driver which assumes default.
 
 ```js
 var obj = new ObjectManage()
-obj.storage('redis') // redis with default options
-obj.storage('memory') // revert back to the default
-obj.storage({
+obj.$storage('redis') // redis with default options
+obj.$storage('memory') // revert back to the default
+obj.$storage({
   driver: 'redis',
   options: {
     host: '127.0.0.1',
@@ -208,8 +231,8 @@ Storage setup also returns the instance so it can be chained on to the construct
 
 ```js
 var obj = new ObjectManage().storage('redis')
-obj.set('foo','yes')
-obj.save(function(err){
+obj.$set('foo','yes')
+obj.$save(function(err){
   if(err) throw err
   process.exit()
 })
@@ -226,9 +249,9 @@ to the callback of the save function and will be available through the
 
 ```js
 var obj = new ObjectManage()
-obj.storage('redis')
-obj.data.foo = 1
-obj.save(function(err,handle,data){
+obj.$storage('redis')
+obj.foo = 1
+obj.$save(function(err,handle,data){
   if(err) throw err
   console.log(handle) //prints the instance id
   console.log(data.foo) //1
@@ -243,17 +266,17 @@ has been set.
 
 ```js
 var obj = new ObjectManage()
-console.log(obj.getHandle()) //prints the instance handle
+console.log(obj.$getHandle()) //prints the instance handle
 ```
 
 To set a custom handle used to identify the instance use the setHandle method.
 
 ```js
 var obj = new ObjectManage()
-obj.storage('redis')
-obj.setHandle('foo')
-obj.set('bar','baz')
-obj.save(function(err,handle,data){
+obj.$storage('redis')
+obj.$setHandle('foo')
+obj.$set('bar','baz')
+obj.$save(function(err,handle,data){
   if(err) throw err
   console.log(handle) //foo
   console.log(data.bar) //baz
@@ -266,8 +289,8 @@ To retrieve a saved instance of an object use the restore method.
 
 ```js
 var handle = 'uuid'
-var obj = new ObjectManage().storage('redis')
-obj.restore(handle,function(err,data){
+var obj = new ObjectManage().$storage('redis')
+obj.$restore(handle,function(err,data){
   if(err) throw err
   console.log(data)
 })
@@ -304,7 +327,7 @@ myStorageDriver.prototype.flush = function(handle,next){
 Using the driver
 
 ```js
-var obj = new ObjectManage().storage(new myStorageDriver())
+var obj = new ObjectManage().$storage(new myStorageDriver())
 ```
 
 ## Switching Merge Package
@@ -320,14 +343,14 @@ To use **merge-recursive**
 
 ```js
 var ObjectManage = require('object-manage')
-ObjectManage.prototype.merge = ObjectManage.prototype.mergeRecursive
+ObjectManage.prototype.$merge = ObjectManage.prototype.$mergeRecursive
 ```
 
 It is also possible to implement one's own merging function.
 
 ```js
 var ObjectManage = require('object-manage')
-ObjectManage.prototype.merge = function(obj1,obj2){
+ObjectManage.prototype.$merge = function(obj1,obj2){
   var mergedObject = obj2
   return mergedObject
 }
@@ -346,7 +369,7 @@ Quick example of a validation function for setting values
 
 ```js
 var obj = new ObjectManage()
-obj.validateSet = function(path,value){
+obj.$validateSet = function(path,value){
   //your validation code here that calls one of the below functions
   //erroneous method that still processes the action
   this.warn('should have passed a boolean',value)
@@ -366,11 +389,11 @@ obj.validateSet = function(path,value){
 
 The following callbacks are available.
 
-* validateGet `ObjectManage.validateGet` -- Validate get directives
-* validateSet `ObjectManage.validateSet` -- Validate set directives
-* validateExists `ObjectManage.validateExists` -- Validate exists directives
-* validateRemove `ObjectManage.validateRemove` -- Validate remove directives
-* validateLoad `ObjectManage.validateLoad` -- Validate load directives
+* $validateGet `ObjectManage.$validateGet` -- Validate get directives
+* $validateSet `ObjectManage.$validateSet` -- Validate set directives
+* $validateExists `ObjectManage.$validateExists` -- Validate exists directives
+* $validateRemove `ObjectManage.$validateRemove` -- Validate remove directives
+* $validateLoad `ObjectManage.$validateLoad` -- Validate load directives
 
 ### Verbs
 
@@ -404,8 +427,8 @@ Load is used to merge an argument object into the main object.
 
 ```js
 var inst = new ObjectManage()
-inst.load({mykey: 'mydata'})
-inst.load({mykey2: 'mydata2'})
+inst.$load({mykey: 'mydata'})
+inst.$load({mykey2: 'mydata2'})
 ```
 
 Load will also accept an arbitrary numbers of objects that will
@@ -416,7 +439,7 @@ var data1 = {test1: 'val1', test2: 'val2'}
   , data2 = {test3: 'val3', test4: 'val4'}
   , data3 = {test5: {test6: 'val6'}}
 var inst = new ObjectManage()
-inst.load(data1,data2,data3)
+inst.$load(data1,data2,data3)
 ```
 
 ### Set Value
@@ -425,8 +448,8 @@ Set will recursively set a path given by a string using dot notation.
 
 ```js
 var isnt = new ObjectManage()
-inst.set('mykey','mydata') //{mykey: 'mydata'}
-inst.set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
+inst.$set('mykey','mydata') //{mykey: 'mydata'}
+inst.$set('mykey2.data','mydata') //{mykey: 'mydata', mykey2: {data: 'mydata'}}
 ```
 
 ### Get Value
@@ -435,8 +458,8 @@ Get will recursively set a path given by a string using dot notation.
 
 ```js
 var isnt = new ObjectManage({mykey: 'mydata', mykey2: {data: 'mydata'}})
-inst.get('mykey') //'mydata'
-inst.get('mykey2.data') //'mydata
+inst.$get('mykey') //'mydata'
+inst.$get('mykey2.data') //'mydata
 ```
 
 ### Path Exists
@@ -448,8 +471,8 @@ to return an accurate value even when a path is set to `undefined`
 
 ```js
 var inst = new ObjectManage({mykey: 'myvalue'})
-inst.exists('mykey') //true
-inst.exists('mykey2') //false
+inst.$exists('mykey') //true
+inst.$exists('mykey2') //false
 ```
 
 ### Remove a Path
@@ -461,9 +484,9 @@ to `undefined`
 
 ```js
 var inst = new ObjectManage({mykey: {mykey2: 'myvalue'}})
-inst.exists('mykey.mykey2') //true
-inst.remove('mykey') //true
-inst.exists('mykey.mykey') //false
+inst.$exists('mykey.mykey2') //true
+inst.$remove('mykey') //true
+inst.$exists('mykey.mykey') //false
 ```
 
 ### Check Object Depth
@@ -473,7 +496,7 @@ This will take a userspace object and count the depth of the object.
 ```js
 var inst = new ObjectManage()
 var obj = {foo: {foo: {foo: 'baz'}}}
-obj.countDepth(obj) //3
+inst.$countDepth(obj) //3
 ```
 
 ### Get Paths
@@ -486,9 +509,33 @@ In order to do this use the `ObjectManage.getPaths()` method.
 Example
 ```js
 var obj = new ObjectManage()
-obj.load({foo: {bar: 'baz'}})
-obj.getPaths() // ['foo','foo.bar']
+obj.$load({foo: {bar: 'baz'}})
+obj.$getPaths() // ['foo','foo.bar']
 ````
+
+## Static Methods
+
+### $strip(obj)
+
+Strip returns only the data from an instance of ObjectManage
+
+### $extract(obj)
+
+Extract returns only the internals from an instance of ObjectManage
+
+### $extend(obj)
+
+Extend returns a new instance of ObjectManage populated with `obj`
+
+### $clone(obj)
+
+* When passed a scalar object returns a reference broken clone of it
+* When passed an instance of ObjectManage returns a new reference broken ObjectManage
+
+### $countDepth(obj,maxDepth)
+
+Counts the depth of the object up to `maxDepth` and returns that number.
+If `maxDepth` is omitted it will be set to `50`
 
 ## Events
 
@@ -502,11 +549,11 @@ Fired when a set is processed on the managed object
 
 ```js
 var obj = new require('object-manage')()
-obj.on('set',function(path,value,valid){
+obj.$on('set',function(path,value,valid){
   valid = valid ? 'valid' : 'invalid'
   console.log('a ' + valid + ' value of (' + value + ') set to (' + path + ')')
 })
-obj.set('foo','bar')
+obj.$set('foo','bar')
 ```
 
 ### Get
@@ -519,10 +566,10 @@ Fired when a get is processed on the managed object
 
 ```js
 var obj = new require('object-manage')()
-obj.on('get',function(path,value){
+obj.$on('get',function(path,value){
   console.log(value + ' was retrieved from ' + path)
 })
-obj.get('foo')
+obj.$get('foo')
 ```
 
 ### Exists
@@ -534,11 +581,11 @@ Fired when an exists operation is performed
 
 ```js
 var obj = new require('object-manage')()
-obj.on('exists',function(path,exists){
+obj.$on('exists',function(path,exists){
   var does = exists ? 'does' : 'does not'
   console.log('checked if ' + path + ' exists and it ' + does)
 })
-obj.exists('foo')
+obj.$exists('foo')
 ```
 
 ### Remove
@@ -550,11 +597,11 @@ Fired when an remove operation is performed
 
 ```js
 var obj = new require('object-manage')()
-obj.on('exists',function(path,removed){
+obj.$on('exists',function(path,removed){
   var successfully = removed ? 'successfully' : 'unsuccessfully'
   console.log(successfully + ' removed path (' + path + ')')
 })
-obj.remove('foo')
+obj.$remove('foo')
 ```
 
 ### Load
@@ -565,10 +612,10 @@ Fired when a load and merge is performed on the managed object
 
 ```js
 var obj = new require('object-manage')()
-obj.on('load',function(data){
+obj.$on('load',function(data){
   console.log('a merge was performed and the resulting data: ' + data)
 })
-obj.load({foo: 'bar'})
+obj.$load({foo: 'bar'})
 ```
 
 ### Generate Handle
@@ -577,10 +624,10 @@ Fired when a handle is generated for the instance
 
 ```js
 var obj = new require('object-manage')()
-obj.on('generateHandle',function(handle){
+obj.$on('generateHandle',function(handle){
   console.log('a handle was generated: ' + handle)
 })
-obj.generateHandle()
+obj.$generateHandle()
 ```
 
 ### Save
@@ -589,14 +636,14 @@ Fired when a save to the storage driver is called
 
 ```js
 var obj = new require('object-manage')()
-obj.on('save',function(err,handle,data){
+obj.$on('save',function(err,handle,data){
   if(err) throw err
   console.log(handle) //foo
   console.log(data.foo) //yes
 })
-obj.set('foo','yes')
-obj.setHandle('foo')
-obj.save()
+obj.$set('foo','yes')
+obj.$setHandle('foo')
+obj.$save()
 ```
 
 ### Restore
@@ -605,11 +652,11 @@ Fired when a restore to the storage driver is called
 
 ```js
 var obj = new require('object-manage')()
-obj.on('restore',function(err,data){
+obj.$on('restore',function(err,data){
   if(err) throw err
   console.log(data.foo) //yes
 })
-obj.restore('foo')
+obj.$restore('foo')
 ```
 
 ### Flush
@@ -618,12 +665,12 @@ Fired when a flush to the storage driver is called
 
 ```js
 var obj = new require('object-manage')()
-obj.on('flush',function(err){
+obj.$on('flush',function(err){
   if(err) throw err
   console.log('flushed instance')
 })
-obj.restore('foo')
-obj.flush()
+obj.$restore('foo')
+obj.$flush()
 ```
 
 ### Drop
@@ -637,13 +684,13 @@ Fired when there is a validation `drop`
 
 ```js
 var obj = new require('object-manage')()
-obj.on('drop',function(verb,message,path,value){
+obj.$on('drop',function(verb,message,path,value){
   console.log('object-manage drop [' + verb + ':' + path + ']: ' + message)
 })
-obj.validateSet = function(path,value){
+obj.$validateSet = function(path,value){
   this.drop('not accepting anything')
 }
-obj.set('foo','will drop') //returns true
+obj.$set('foo','will drop') //returns true
 ```
 
 ### Reject
@@ -657,13 +704,13 @@ Fired when there is a validation `reject`
 
 ```js
 var obj = new require('object-manage')()
-obj.on('reject',function(verb,message,path,value){
+obj.$on('reject',function(verb,message,path,value){
   console.log('object-manage reject [' + verb + ':' + path + ']: ' + message)
 })
-obj.validateSet = function(path,value){
+obj.$validateSet = function(path,value){
   this.reject('not accepting anything')
 }
-obj.set('foo','will drop') //returns false
+obj.$set('foo','will drop') //returns false
 ```
 
 ### Warning
@@ -677,10 +724,10 @@ Fired when there is a set/get/merge warning.
 
 ```js
 var obj = new require('object-manage')()
-obj.on('warn',function(verb,message,path,value){
+obj.$on('warn',function(verb,message,path,value){
   console.log('object-manage warning [' + verb + ']: ' + message)
 })
-obj.load(overlyDeepObject)
+obj.$load(overlyDeepObject)
 ```
 
 ### Error
@@ -694,13 +741,21 @@ Fired when there is a set/get/merge error.
 
 ```js
 var obj = new require('object-manage')()
-obj.on('error',function(verb,message,path,value){
+obj.$on('error',function(verb,message,path,value){
   console.log('object-manage error [' + verb + ']: ' + message)
 })
-obj.load(overlyDeepObject)
+obj.$load(overlyDeepObject)
 ```
 
 ## Changelog
+
+### 0.8.0
+* Completely rewritten API
+* Data no stored directly in the main object
+* Methods all renamed and prefixed with `$` eg `obj.get -> obj.$get`
+* Dropped support for Node 0.8.x
+* Overall code cleanup with gjslint standards
+* Addition of several static helpers such as: $strip, $extract, $clone, $extend, $countDepth
 
 ### 0.7.1
 * Fixes #3 where object length would be mistaken for object depth. Also uses a quicker depth counting function.
