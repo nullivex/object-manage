@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "chai": "3.5.x",
-    "jshint-stylish": "2.2.x",
     "mocha": "3.2.x"
   },
   "scripts": {
