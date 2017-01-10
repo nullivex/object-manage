@@ -1,4 +1,4 @@
-object-manage [![Build Status](https://travis-ci.org/snailjs/object-manage.png?branch=master)](https://travis-ci.org/snailjs/object-manage)
+object-manage [![Build Status](https://travis-ci.org/nullivex/object-manage.png?branch=master)](https://travis-ci.org/nullivex/object-manage)
 =============
 
 A library for managing javascript objects and offering common getter, setter, merge support.
@@ -748,6 +748,11 @@ obj.$load(overlyDeepObject)
 ```
 
 ## Changelog
+
+### 0.8.1
+* Update dependencies
+* Test against all major node versions
+* Enable support for 0.8.x
 
 ### 0.8.0
 * Completely rewritten API
