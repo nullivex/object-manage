@@ -1,10 +1,10 @@
 {
   "name": "object-manage",
   "description": "A library for managing javascript objects and offering common getter, setter, merge support.",
-  "homepage": "https://github.com/snailjs/object-manage",
-  "bugs": "https://github.com/snailjs/object-manage/issues",
-  "version": "0.8.1",
-  "author": "Bryan Tong <contact@nullivex.com>",
+  "homepage": "https://www.nullivex.com",
+  "bugs": "https://github.com/nullivex/object-manage/issues",
+  "version": "1.0.0",
+  "author": "NULLIVEX LLC <contact@nullivex.com>",
   "license": "MIT",
   "keywords": [
     "object",
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/snailjs/object-manage.git"
+    "url": "https://github.com/nullivex/object-manage.git"
   },
   "engines": {
     "node": ">=0.8.0"
@@ -27,12 +27,12 @@
   "dependencies": {
     "merge-recursive": "0.0.x",
     "object-merge": "2.5.x",
-    "redis": "2.6.x",
-    "uuid": "3.0.x"
+    "redis": "2.7.x",
+    "uuid": "3.1.x"
   },
   "devDependencies": {
-    "chai": "3.5.x",
-    "mocha": "3.2.x"
+    "chai": "4.1.x",
+    "mocha": "3.4.x"
   },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"

@@ -749,6 +749,12 @@ obj.$load(overlyDeepObject)
 
 ## Changelog
 
+### 1.0.0
+* Update dependencies
+* Updated support for latest Node.js versions
+* Dropped support for Node.js < 4.x (however older versions should still work!)
+* Releasing 1.0.0 to prove the long term stability of this package.
+
 ### 0.8.1
 * Update dependencies
 * Test against all major node versions
