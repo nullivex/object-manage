@@ -5,16 +5,6 @@ A library for managing javascript objects and offering common getter, setter, me
 
 Works great for managing config objects and libraries that have options.
 
-## > 0.8.x
-
-As of 0.8.x the API was completely reimagined so that ObjectManage would only extend the object.
-Allowing it to be passed and used like any other object but with extended functionality.
-
-This breaks all implementations of the 0.7.x branch which has been split to be maintained separately.
-
-The main change is that the `ObjectManage.data` storage object has been moved to the root and all the
-extension methods are now prefixed with `$` eg: `var obj = new ObjectManage(); obj.$get('foo');`
-
 ## Installation
 
 ```
@@ -749,6 +739,11 @@ obj.$load(overlyDeepObject)
 
 ## Changelog
 
+### 1.1.0
+* Update dependencies
+* Fix security vulnerabilities in dependencies
+* Node requirement changes to 4.x or greater
+
 ### 1.0.0
 * Update dependencies
 * Updated support for latest Node.js versions
@@ -767,6 +762,18 @@ obj.$load(overlyDeepObject)
 * Dropped support for Node 0.8.x
 * Overall code cleanup with gjslint standards
 * Addition of several static helpers such as: $strip, $extract, $clone, $extend, $countDepth
+
+#### Upgrade Notes
+
+##### > 0.8.x
+
+As of 0.8.x the API was completely reimagined so that ObjectManage would only extend the object.
+Allowing it to be passed and used like any other object but with extended functionality.
+
+This breaks all implementations of the 0.7.x branch which has been split to be maintained separately.
+
+The main change is that the `ObjectManage.data` storage object has been moved to the root and all the
+extension methods are now prefixed with `$` eg: `var obj = new ObjectManage(); obj.$get('foo');`
 
 ### 0.7.1
 * Fixes #3 where object length would be mistaken for object depth. Also uses a quicker depth counting function.

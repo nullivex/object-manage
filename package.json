@@ -3,7 +3,7 @@
   "description": "A library for managing javascript objects and offering common getter, setter, merge support.",
   "homepage": "https://www.nullivex.com",
   "bugs": "https://github.com/nullivex/object-manage/issues",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "NULLIVEX LLC <contact@nullivex.com>",
   "license": "MIT",
   "keywords": [
@@ -22,17 +22,17 @@
     "url": "https://github.com/nullivex/object-manage.git"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4"
   },
   "dependencies": {
     "merge-recursive": "0.0.x",
     "object-merge": "2.5.x",
-    "redis": "2.7.x",
-    "uuid": "3.1.x"
+    "redis": "2.8.x",
+    "uuid": "3.3.x"
   },
   "devDependencies": {
     "chai": "4.1.x",
-    "mocha": "3.4.x"
+    "mocha": "5.2.x"
   },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha"
