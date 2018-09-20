@@ -320,21 +320,7 @@ Using the driver
 var obj = new ObjectManage().$storage(new myStorageDriver())
 ```
 
-## Switching Merge Package
-
-In order to make object-manage more performance friendly in smaller environments
-the merger can easily be switched between **object-merge** for **merge-recursive**.
-**merge-recursive** will only merge pointers and thus when the object-manage instance
-is modified the original objects will be as well. We choose **object-merge** as the
-default because it will decouple from the objects being merged in. This comes with a
-performance and memory cost.
-
-To use **merge-recursive**
-
-```js
-var ObjectManage = require('object-manage')
-ObjectManage.prototype.$merge = ObjectManage.prototype.$mergeRecursive
-```
+## Implement Custom Merge Package
 
 It is also possible to implement one's own merging function.
 
@@ -743,6 +729,8 @@ obj.$load(overlyDeepObject)
 * Update dependencies
 * Fix security vulnerabilities in dependencies
 * Node requirement changes to 4.x or greater
+* Remove the ability to use `merge-recursive` from the core package as it
+contains a security vulnerability and the author has not published a fix.
 
 ### 1.0.0
 * Update dependencies

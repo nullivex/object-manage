@@ -25,7 +25,6 @@
     "node": ">=4"
   },
   "dependencies": {
-    "merge-recursive": "0.0.x",
     "object-merge": "2.5.x",
     "redis": "2.8.x",
     "uuid": "3.3.x"

@@ -418,13 +418,6 @@ describe('ObjectManage',function(){
       }
       expect(load).to.throw(Error)
     })
-    it('should work using merge-recursive',function(){
-      var obj = new ObjectManage()
-      obj.$merge = ObjectManage.prototype.$mergeRecursive
-      obj.$load(data1)
-      obj.$load(data3)
-      expect(obj.$get('test5.test6')).to.equal('val6')
-    })
     it('should count object depth accurately',function(){
       var testObject = {foo: {foo: {foo: 'baz'}}}
         , obj = new ObjectManage()
