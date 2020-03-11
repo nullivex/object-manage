@@ -1,6 +1,15 @@
 object-manage [![Build Status](https://travis-ci.org/nullivex/object-manage.png?branch=master)](https://travis-ci.org/nullivex/object-manage)
 =============
 
+## Kado
+
+STOP AND READ THIS
+
+A new package is available to handle all your JavaScript needs.
+See [kado.org](https://kado.org) for details.
+
+## Summary
+
 A library for managing javascript objects and offering common getter, setter, merge support.
 
 Works great for managing config objects and libraries that have options.
@@ -724,6 +733,14 @@ obj.$load(overlyDeepObject)
 ```
 
 ## Changelog
+
+### 1.1.1
+* Update the following dependencies
+  * redis  2.8.x  →  3.0.x
+  * uuid   3.3.x  →  7.0.x
+  * chai   4.1.x  →  4.2.x
+  * mocha  5.2.x  →  7.1.x
+* Add notice about Kado for future use.
 
 ### 1.1.0
 * Update dependencies
